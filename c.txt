@@ -1,0 +1,4 @@
+c file data
+
+copy to
+another file
