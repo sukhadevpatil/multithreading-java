@@ -42,7 +42,7 @@ public class Main {
 
     public static void main(String[] args) {
         // Example Data
-        int arr[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+        int[] arr = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
         // Size of each block.
         int blockSize = 3;
@@ -51,16 +51,13 @@ public class Main {
         // If say the value for noOfBlocks is 3.3,
         // we know that there are 4 blocks.
         // Hence took the ceil value i.e. 4.
-        int noOfBlocks =
-                (int) Math.ceil((double)arr.length/blockSize);
+        int noOfBlocks = (int) Math.ceil((double) arr.length / blockSize);
 
         // A fixed thread pool of size 3 to calculate the sum.
-        ExecutorService executorService =
-                Executors.newFixedThreadPool(3);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         // Future objects are saved to fetch the results after completion.
-        List<Future<Integer>> futureObjList =
-                new ArrayList<Future<Integer>>();
+        List<Future<Integer>> futureObjList = new ArrayList<>();
 
         // For each partition.
         int start = 0, end;
@@ -68,7 +65,7 @@ public class Main {
 
             // Calculate the starting and ending index positions
             // of the i th partition.
-            start = (i-1) * blockSize;
+            start = (i - 1) * blockSize;
             end = start + blockSize - 1;
 
             // Check if end crosses the actual array size,
@@ -81,9 +78,7 @@ public class Main {
             // Submit the SumCalculatorTask a Callable task
             // which is responsible
             // for calculating the partition sum.
-            Future<Integer> future =
-                    executorService.submit(
-                            new SumCalculatorTask(arr, start, end));
+            Future<Integer> future = executorService.submit(new SumCalculatorTask(arr, start, end));
 
             // We need it to fetch the computed sum,
             // hence added to the list.
@@ -106,7 +101,7 @@ public class Main {
     private static int getComputedValue(Future<Integer> future) {
 
         // Waiting for future object to complete
-        while (! future.isDone()) {
+        while (!future.isDone()) {
             // Pass control to other threads;
             // if any; waiting for CPU.
             Thread.yield();

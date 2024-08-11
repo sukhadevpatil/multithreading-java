@@ -1,17 +1,23 @@
 package io.section2;
 
 import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileOperation {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
+        // Creates a fixed thread pool of size 5.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        Thread t1 = new Thread(new Task("a.txt", "b.txt"));
-        t1.start();
+        // Assume you are submitting 100 copy tasks,
+        // then executor service uses a fixed thread
+        // pool of size 5 to execute them.
+        executor.execute(new Task("a.txt", "b.txt"));
+        executor.execute(new Task("c.txt", "d.txt"));
 
-        Thread t2 = new Thread(new Task("c.txt", "d.txt"));
-        t2.start();
-
+        executor.close();
+        System.out.println("Done...");
     }
 }
 
