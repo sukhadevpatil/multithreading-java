@@ -1,74 +1,52 @@
 package io.section9;
 
-class Sample {
+class Sample1 {
 
-    private int x;
+    static int a = 5;
+    int b = 10;
 
-    public int getX() {
-        return x;
-    }
+    public  void increment( ) {
+        // lock the Class object before modifying
+        // static content.
+        synchronized(Sample.class) {
+            a++;
+        }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /*
-     * Try removing synchronized.
-     */
-    public synchronized void incr() {
-
-        // read the value of x.
-        int y = getX();
-
-        // Increment the value
-        y++;
-
-        // Just assume if control is switched to
-        // some other thread and it too looks at
-        // the old value of x and proceeds with
-        // modification. Such scenarios lead to
-        // in consistent results.
-        // To simulate such scenarios lets us just
-        // pass the control to some other thread.
-
-        // with sleep this thread will go to blocked state
-        // for the given time interval, hence other thread
-        // will get a chance.
-        try { Thread.sleep(1000); } catch(Exception e) {}
-
-        // set x to new value.
-        setX(y);
+        // lock the object before modifying
+        // instance members.
+        synchronized(this) {
+            b++;
+        }
     }
 }
 
-class MyThread extends Thread {
+class MyThread1 extends Thread {
 
-    Sample obj;
+    Sample1 obj;
 
-    public MyThread(Sample obj) {
+    public MyThread1(Sample1 obj) {
         this.obj = obj;
     }
 
     public void run() {
-        obj.incr();
+        obj.increment();
     }
 
 }
 
-public class Main1 {
+public class Main2 {
 
     public static void main(String[] args) {
 
-        Sample obj = new Sample();
-        obj.setX(10);
+        Sample1 obj = new Sample1();
 
         // In this case both the threads t1 and t2
         // are sharing the same Sample object obj.
         // Both the threads will try to perform the
         // increment operation simultaneously.
 
-        MyThread t1 = new MyThread(obj);
-        MyThread t2 = new MyThread(obj);
+        MyThread1 t1 = new MyThread1(obj);
+        MyThread1 t2 = new MyThread1(obj);
 
         t1.start();
         t2.start();
@@ -83,7 +61,9 @@ public class Main1 {
             e.printStackTrace();
         }
 
-        System.out.println( obj.getX() );
+        System.out.println(obj.a);
+        System.out.println(obj.b);
+
     }
 
 }
