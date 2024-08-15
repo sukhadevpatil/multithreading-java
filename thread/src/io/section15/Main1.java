@@ -13,7 +13,7 @@ public class Main1 {
         queue.add(8);
 
         //By default it get sorted
-        queue.forEach(System.out::println);
+        queue.forEach(a -> System.out.println(queue.poll()));
 
          PriorityBlockingQueue<Student> queue2 = new PriorityBlockingQueue<>(5, new StudentComparator());
 
