@@ -1,4 +1,4 @@
-package io.states;
+package io.Lessons;
 
 public class MyThread2 extends Thread {
 
